@@ -1,0 +1,39 @@
+name: EdgeDB Tests
+
+on:
+  push:
+    branches:
+    - master
+    - ci
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+        fetch-depth: 50
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install libreadline-dev
+    - name: Restore cache
+      uses: actions/download-artifact@v1
+      with:
+        name: cache
+    - name: Install dependencies
+      run: |
+        .ci/travis-install.sh
+    - name: Test
+      run: |
+        .ci/travis-tests.sh
+    - name: Store cache
+      uses: actions/upload-artifact@v1
+      with:
+        name: cache
+        path: build

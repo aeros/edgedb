@@ -15,7 +15,6 @@ branches:
     # Avoid building PR branches.
     only:
         - master
-        - ci
         - releases
         - /^v\d+(\.\d+)*$/
 
